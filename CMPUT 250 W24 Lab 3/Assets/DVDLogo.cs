@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class DVDLogo : MonoBehaviour
 {
     //Speed it moves at
-    public float speed = 3;
+    private float speed = 10;
 
     //Bounds of the screen (could get these with camera bounds but we can do this since it's a fixed camera)
     public float X_Max = 5, Y_Max = 4;
@@ -13,13 +15,16 @@ public class DVDLogo : MonoBehaviour
     //Current direction
     private Vector3 direction;
 
+    //Sound effect source
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         //Randomly initialize direction
         direction = new Vector3(Random.Range(-1f,1f), Random.Range(-1f,1f));
         direction.Normalize();
-
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     private void FlipDirectionX(){
@@ -27,6 +32,10 @@ public class DVDLogo : MonoBehaviour
         direction.x+= Random.Range(-0.1f,0.1f);
         direction.y+= Random.Range(-0.1f,0.1f);
         direction.Normalize();
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
     }
 
     private void FlipDirectionY(){
@@ -34,6 +43,10 @@ public class DVDLogo : MonoBehaviour
         direction.x+= Random.Range(-0.1f,0.1f);
         direction.y+= Random.Range(-0.1f,0.1f);
         direction.Normalize();
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
     }
 
     // Update is called once per frame
@@ -60,5 +73,6 @@ public class DVDLogo : MonoBehaviour
         }
 
         transform.position += direction*Time.deltaTime*speed;
+        transform.RotateAround(gameObject.transform.position, Vector3.back, 500*Time.deltaTime);
     }
 }
